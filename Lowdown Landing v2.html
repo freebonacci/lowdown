@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lowdown — Let candidates ask before they apply</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ivory:#FAFAF7;
+    --paper:#F1EFE8;
+    --paper-2:#E8E6DF;
+    --line:#D3D1C7;
+    --line-soft:#E8E6DF;
+    --ink:#2C2C2A;
+    --ink-2:#444441;
+    --ink-3:#5F5E5A;
+    --muted:#888780;
+    --muted-2:#B4B2A9;
+    --forest:#0F6E56;
+    --forest-deep:#085041;
+    --mint:#E1F5EE;
+    --mint-2:#CFEBDF;
+    --sage:#5DCAA5;
+    --clay:#C96D4A;
+    --amber:#D8A24A;
+    --rose:#D88484;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'DM Sans',sans-serif;
+    background:var(--ivory);
+    color:var(--ink);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────────────── */
+  nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:1.1rem 2.25rem;
+    background:rgba(250,250,247,.88);
+    backdrop-filter:blur(10px);
+    position:sticky;top:0;z-index:50;
+    border-bottom:.5px solid var(--line-soft);
+  }
+  .logo{font-family:'Lora',serif;font-size:20px;font-weight:400;color:var(--ink);letter-spacing:-.3px;text-decoration:none;display:inline-flex;align-items:baseline;gap:0}
+  .logo span{color:var(--forest)}
+  .logo .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--forest);margin-left:2px;transform:translateY(-1px)}
+  .nav-links{display:flex;gap:1.75rem;align-items:center}
+  .nav-link{font-size:13px;color:var(--muted);cursor:pointer;letter-spacing:.1px;text-decoration:none;transition:color .2s}
+  .nav-link:hover{color:var(--ink)}
+  .nav-cta{background:var(--ink);color:var(--paper);border:none;padding:8px 18px;border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:400;letter-spacing:.1px;transition:background .2s}
+  .nav-cta:hover{background:var(--forest)}
+
+  /* ─── HERO ────────────────────────────────────────────────────── */
+  .hero{max-width:820px;margin:0 auto;padding:5.5rem 2rem 3rem;text-align:center;position:relative}
+  .hero-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--mint);color:var(--forest);
+    font-size:12px;font-weight:500;padding:5px 14px 5px 8px;border-radius:20px;
+    margin-bottom:1.6rem;letter-spacing:.3px;
+  }
+  .hero-tag .pulse{width:6px;height:6px;border-radius:50%;background:var(--forest);position:relative}
+  .hero-tag .pulse::after{content:'';position:absolute;inset:-3px;border-radius:50%;background:var(--forest);opacity:.35;animation:pulse 2s ease-out infinite}
+  @keyframes pulse{0%{transform:scale(.6);opacity:.5}100%{transform:scale(2.2);opacity:0}}
+  h1{
+    font-family:'Lora',serif;font-weight:400;
+    font-size:clamp(38px,6vw,60px);
+    line-height:1.08;letter-spacing:-1.2px;color:var(--ink);
+    margin-bottom:1.4rem;text-wrap:balance;
+  }
+  h1 em{font-style:italic;color:var(--forest)}
+  .hero-sub{font-size:18px;color:var(--ink-3);line-height:1.6;max-width:580px;margin:0 auto 2.25rem;font-weight:300;text-wrap:pretty}
+  .hero-cta-group{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap}
+  .btn-primary{background:var(--forest);color:var(--mint);border:none;padding:13px 26px;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500;transition:background .2s,transform .1s}
+  .btn-primary:hover{background:var(--forest-deep)}
+  .btn-primary:active{transform:translateY(1px)}
+  .btn-secondary{background:transparent;color:var(--ink);border:.5px solid var(--muted-2);padding:13px 24px;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:border-color .2s,color .2s}
+  .btn-secondary:hover{border-color:var(--ink)}
+  .hero-note{font-size:12px;color:var(--muted);margin-top:1.1rem;letter-spacing:.2px}
+  .hero-note .dot-sep{display:inline-block;margin:0 8px;opacity:.5}
+
+  /* ─── DEMO WINDOW ─────────────────────────────────────────────── */
+  .demo-wrap{max-width:860px;margin:2.5rem auto 5rem;padding:0 1.5rem;position:relative}
+  .demo-window{background:#FFF;border:.5px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 14px 50px -12px rgba(44,44,42,.14),0 4px 14px -4px rgba(44,44,42,.06)}
+  .demo-topbar{background:var(--paper);padding:10px 14px;display:flex;align-items:center;gap:6px;border-bottom:.5px solid var(--line)}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .dot-r{background:#F09595}.dot-y{background:#FAC775}.dot-g{background:#5DCAA5}
+  .demo-url{flex:1;background:#FFF;border:.5px solid var(--line);border-radius:4px;padding:3px 10px;font-size:11px;color:var(--muted);margin-left:8px;font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:6px}
+  .demo-url svg{flex-shrink:0;opacity:.5}
+  .demo-body{display:grid;grid-template-columns:1.15fr 1fr;min-height:420px}
+  .demo-left{padding:1.5rem 1.75rem;border-right:.5px solid var(--line);overflow:hidden;display:flex;flex-direction:column;position:relative}
+  .demo-right{display:flex;flex-direction:column;background:#FFF}
+  .jd-eyebrow{font-size:11px;color:var(--muted);margin-bottom:4px;font-family:'JetBrains Mono',monospace;letter-spacing:.3px}
+  .jd-title{font-family:'Lora',serif;font-size:22px;font-weight:400;color:var(--ink);margin-bottom:2px;letter-spacing:-.3px}
+  .jd-meta{font-size:12px;color:var(--ink-3);margin-bottom:1rem}
+  .jd-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}
+  .jd-pill{font-size:11px;color:var(--ink-3);background:var(--paper);border-radius:4px;padding:3px 9px}
+  .jd-divider{border:none;border-top:.5px solid var(--line-soft);margin:.6rem 0}
+  .jd-section-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.7px;color:var(--muted-2);margin-bottom:5px}
+  .jd-body{font-size:12.5px;color:var(--ink-2);line-height:1.7;font-weight:300}
+  .jd-list{list-style:none}
+  .jd-list li{font-size:12.5px;color:var(--ink-2);line-height:1.6;padding:1px 0;display:flex;gap:8px;font-weight:300}
+  .jd-list li::before{content:'–';color:var(--muted-2);flex-shrink:0}
+  .jd-fade{position:absolute;left:0;right:0;bottom:0;height:60px;background:linear-gradient(to bottom,rgba(255,255,255,0),#fff);pointer-events:none}
+
+  .chat-header{padding:14px 16px;border-bottom:.5px solid var(--line-soft);display:flex;align-items:center;gap:10px}
+  .chat-avatar{width:28px;height:28px;border-radius:50%;background:var(--mint);color:var(--forest);display:flex;align-items:center;justify-content:center;font-family:'Lora',serif;font-size:14px;flex-shrink:0}
+  .chat-header-title{font-size:13px;font-weight:500;color:var(--ink)}
+  .chat-header-sub{font-size:11px;color:var(--muted);margin-top:1px}
+  .chat-messages{flex:1;padding:14px 14px 8px;display:flex;flex-direction:column;gap:9px;overflow:hidden}
+  .chat-bubble{padding:9px 12px;border-radius:12px;font-size:12.5px;line-height:1.55}
+  .chat-them{background:var(--paper);color:var(--ink);align-self:flex-start;max-width:85%;border-bottom-left-radius:3px}
+  .chat-us{background:var(--forest);color:var(--mint);align-self:flex-end;max-width:88%;border-bottom-right-radius:3px}
+  .chat-input-area{padding:10px 12px;border-top:.5px solid var(--line-soft);display:flex;gap:7px;align-items:center}
+  .chat-input{flex:1;border:.5px solid var(--line);border-radius:20px;padding:8px 14px;font-size:12px;font-family:'DM Sans',sans-serif;background:var(--ivory);color:var(--ink);outline:none}
+  .chat-send-btn{width:30px;height:30px;border-radius:50%;background:var(--forest);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .send-arrow{width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:8px solid var(--mint);margin-left:2px}
+
+  /* tag hover row under demo */
+  .demo-caption{display:flex;justify-content:space-between;align-items:center;max-width:860px;margin:14px auto 0;padding:0 .5rem;font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:.2px}
+  .demo-caption .left{display:flex;align-items:center;gap:8px}
+  .demo-caption .live{width:6px;height:6px;border-radius:50%;background:var(--sage)}
+
+  /* ─── SECTION SHELL ───────────────────────────────────────────── */
+  .section-label{font-size:11px;color:var(--forest);text-transform:uppercase;letter-spacing:1px;font-weight:500;margin-bottom:.85rem;font-family:'DM Sans',sans-serif}
+  .section-title{font-family:'Lora',serif;font-size:clamp(28px,4vw,40px);font-weight:400;line-height:1.15;color:var(--ink);margin-bottom:1rem;letter-spacing:-.5px;text-wrap:balance}
+  .section-title em{font-style:italic;color:var(--forest)}
+  .section-sub{font-size:16px;color:var(--ink-3);line-height:1.6;max-width:540px;font-weight:300}
+
+  /* ─── PROBLEMS ────────────────────────────────────────────────── */
+  .problems{background:var(--paper);padding:5rem 2rem;border-top:.5px solid var(--line-soft);border-bottom:.5px solid var(--line-soft)}
+  .problems-inner{max-width:960px;margin:0 auto}
+  .problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2.75rem}
+  .problem-card{background:#FFF;border:.5px solid var(--line);border-radius:12px;padding:1.5rem 1.4rem;position:relative;overflow:hidden}
+  .problem-num{font-family:'Lora',serif;font-size:32px;color:var(--muted-2);font-weight:400;margin-bottom:.5rem;font-style:italic}
+  .problem-title{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:.5rem}
+  .problem-text{font-size:13px;color:var(--ink-3);line-height:1.6;font-weight:300}
+
+  /* ─── BENEFITS (FOR HIRERS) ───────────────────────────────────── */
+  .benefits{padding:6rem 2rem 5rem;max-width:1080px;margin:0 auto}
+  .benefits-head{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:end;margin-bottom:3.5rem}
+  .benefits-head .right{font-size:14px;color:var(--ink-3);line-height:1.65;max-width:380px;font-weight:300}
+  .benefit-row{display:grid;grid-template-columns:1fr 1.1fr;gap:3.5rem;align-items:center;padding:2.75rem 0;border-top:.5px solid var(--line-soft)}
+  .benefit-row:last-child{border-bottom:.5px solid var(--line-soft)}
+  .benefit-row.flip{grid-template-columns:1.1fr 1fr}
+  .benefit-row.flip .b-text{order:2}
+  .benefit-row.flip .b-visual{order:1}
+  .b-idx{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.8px;margin-bottom:.85rem}
+  .b-title{font-family:'Lora',serif;font-size:28px;font-weight:400;line-height:1.2;letter-spacing:-.4px;color:var(--ink);margin-bottom:.85rem;text-wrap:balance}
+  .b-title em{color:var(--forest);font-style:italic}
+  .b-desc{font-size:15px;color:var(--ink-3);line-height:1.6;font-weight:300;max-width:440px;text-wrap:pretty}
+  .b-visual{min-height:240px;position:relative}
+
+  /* visuals: 01 — question pile */
+  .vis-card{background:#FFF;border:.5px solid var(--line);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--ink-2);font-weight:300;line-height:1.5;box-shadow:0 2px 10px -4px rgba(44,44,42,.06)}
+  .q-stack{position:relative;height:240px}
+  .q-stack .q{position:absolute;left:0;right:40px}
+  .q-stack .q .tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.4px;margin-top:4px;display:flex;gap:10px;align-items:center}
+  .q-stack .q .count{background:var(--mint);color:var(--forest);padding:2px 7px;border-radius:10px;font-size:10px;font-weight:500;font-family:'DM Sans',sans-serif}
+  .q-stack .q-1{top:0;transform:rotate(-1.2deg);z-index:3}
+  .q-stack .q-2{top:80px;left:30px;right:10px;transform:rotate(.8deg);z-index:2}
+  .q-stack .q-3{top:160px;left:10px;right:30px;transform:rotate(-.5deg);z-index:1}
+  .q-stack .auto-answer{position:absolute;right:-8px;top:34px;background:var(--ink);color:var(--paper);font-size:10px;padding:4px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace;letter-spacing:.3px;z-index:4;box-shadow:0 4px 14px -4px rgba(44,44,42,.3)}
+  .q-stack .auto-answer::before{content:'';position:absolute;left:-4px;top:50%;transform:translateY(-50%);border:4px solid transparent;border-right-color:var(--ink)}
+
+  /* visuals: 02 — candidate list with scores */
+  .cand-list{background:#FFF;border:.5px solid var(--line);border-radius:12px;overflow:hidden}
+  .cand-row{display:grid;grid-template-columns:24px 1fr auto auto;gap:12px;align-items:center;padding:10px 14px;border-bottom:.5px solid var(--line-soft);font-size:12.5px}
+  .cand-row:last-child{border-bottom:none}
+  .cand-row.head{background:var(--paper);color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.7px;padding:7px 14px}
+  .cand-av{width:22px;height:22px;border-radius:50%;background:var(--mint);color:var(--forest);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500}
+  .cand-av.c2{background:#F5E6D3;color:var(--clay)}
+  .cand-av.c3{background:#F6DADA;color:var(--rose)}
+  .cand-av.c4{background:#EFE8D4;color:var(--amber)}
+  .cand-name{color:var(--ink);font-weight:400}
+  .cand-name .sub{color:var(--muted);font-weight:300;margin-left:6px;font-size:11px}
+  .cand-qs{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:11px}
+  .score{display:flex;gap:2px}
+  .score i{width:10px;height:3px;background:var(--line);border-radius:2px;display:inline-block}
+  .score i.on{background:var(--forest)}
+  .flag{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500;letter-spacing:.2px}
+  .flag.star{background:var(--mint);color:var(--forest)}
+  .flag.warn{background:#FBEBD8;color:var(--clay)}
+
+  /* visuals: 03 — drop-off funnel */
+  .funnel{background:#FFF;border:.5px solid var(--line);border-radius:12px;padding:20px 22px}
+  .funnel-title{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.7px;text-transform:uppercase;margin-bottom:12px}
+  .funnel-step{margin-bottom:14px}
+  .funnel-step:last-child{margin-bottom:0}
+  .funnel-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;font-size:12.5px}
+  .funnel-row .label{color:var(--ink)}
+  .funnel-row .num{font-family:'JetBrains Mono',monospace;color:var(--ink);font-weight:500}
+  .funnel-bar{height:8px;background:var(--paper);border-radius:4px;overflow:hidden;position:relative}
+  .funnel-bar .fill{position:absolute;left:0;top:0;bottom:0;background:var(--forest);border-radius:4px}
+  .funnel-bar .fill.warn{background:var(--clay)}
+  .funnel-note{font-size:11px;color:var(--muted);margin-top:5px;font-style:italic}
+  .funnel-note strong{color:var(--clay);font-style:normal;font-weight:500}
+
+  /* new drop-off viz */
+  .dropoff{display:flex;flex-direction:column;gap:10px}
+  .do-card{background:#FFF;border:.5px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center}
+  .do-card.bad{border-color:rgba(201,109,74,.35);background:#FDF7F2}
+  .do-q{font-size:13px;color:var(--ink);line-height:1.4;font-weight:400}
+  .do-a{font-size:11.5px;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace;letter-spacing:.2px;display:flex;align-items:center;gap:6px}
+  .do-a::before{content:'→';color:var(--muted-2)}
+  .do-badge{text-align:right;white-space:nowrap}
+  .do-big{font-family:'Lora',serif;font-size:24px;line-height:1;letter-spacing:-.5px;color:var(--clay);font-weight:400}
+  .do-big.ok{color:var(--forest)}
+  .do-lbl{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:.4px;text-transform:uppercase;margin-top:4px}
+
+  /* visuals: 04 — insight card */
+  .insight{background:#FFF;border:.5px solid var(--line);border-radius:12px;padding:18px 20px}
+  .insight-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .insight-head .tag{background:var(--mint);color:var(--forest);font-size:10px;font-weight:500;padding:3px 8px;border-radius:10px;letter-spacing:.3px;font-family:'DM Sans',sans-serif}
+  .insight-head .name{font-size:13px;color:var(--ink);font-weight:500}
+  .insight-head .meta{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-left:auto}
+  .insight-q{font-size:13px;color:var(--ink-2);line-height:1.55;padding:10px 12px;background:var(--paper);border-radius:8px;margin-bottom:10px;font-weight:300;border-left:2px solid var(--forest)}
+  .insight-meta-row{display:flex;gap:16px;font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+  .insight-meta-row span strong{color:var(--ink);font-weight:500}
+
+  /* visuals: 05 — outreach uplift */
+  .outreach{display:flex;gap:14px;align-items:stretch}
+  .or-col{flex:1;background:#FFF;border:.5px solid var(--line);border-radius:12px;padding:16px 18px;position:relative}
+  .or-col .label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase;margin-bottom:8px}
+  .or-col .big{font-family:'Lora',serif;font-size:38px;font-weight:400;letter-spacing:-1px;color:var(--ink);line-height:1}
+  .or-col .unit{font-size:13px;color:var(--muted);font-weight:300;margin-top:2px}
+  .or-col.active{background:var(--forest);border-color:var(--forest)}
+  .or-col.active .label{color:var(--mint-2)}
+  .or-col.active .big{color:#FFF}
+  .or-col.active .unit{color:var(--mint-2)}
+  .or-arrow{position:absolute;right:-8px;top:50%;transform:translateY(-50%);width:16px;height:16px;background:var(--ivory);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted);z-index:2}
+
+  /* ─── HOW IT WORKS ────────────────────────────────────────────── */
+  .how-section{max-width:960px;margin:0 auto;padding:5rem 2rem;position:relative}
+  .how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-top:3rem;position:relative}
+  .how-grid::before{content:'';position:absolute;top:15px;left:30px;right:30px;height:.5px;background:var(--line-soft);z-index:0}
+  .how-step{position:relative;z-index:1}
+  .how-step-num{width:30px;height:30px;border-radius:50%;background:var(--mint);color:var(--forest);font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;margin-bottom:.95rem;font-family:'Lora',serif;font-style:italic;border:3px solid var(--ivory)}
+  .how-step-title{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:.45rem;line-height:1.3}
+  .how-step-text{font-size:12.5px;color:var(--ink-3);line-height:1.6;font-weight:300}
+
+  /* ─── DASHBOARD PEEK ──────────────────────────────────────────── */
+  .dash-section{background:var(--paper);padding:5rem 2rem;border-top:.5px solid var(--line-soft);border-bottom:.5px solid var(--line-soft)}
+  .dash-inner{max-width:1080px;margin:0 auto}
+  .dash-head{text-align:center;max-width:640px;margin:0 auto 3rem}
+  .dash-head .section-sub{margin:0 auto}
+  .dash{background:#FFF;border:.5px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 14px 50px -14px rgba(44,44,42,.12)}
+  .dash-top{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:.5px solid var(--line-soft);background:var(--ivory)}
+  .dash-top .title{font-family:'Lora',serif;font-size:16px;color:var(--ink)}
+  .dash-top .title .role{color:var(--forest);font-style:italic}
+  .dash-tabs{display:flex;gap:18px;font-size:12px;color:var(--muted);font-family:'DM Sans',sans-serif}
+  .dash-tabs .active{color:var(--ink);font-weight:500;position:relative;padding-bottom:14px;margin-bottom:-14px;border-bottom:1.5px solid var(--forest)}
+  .dash-grid{display:grid;grid-template-columns:1.3fr 1.5fr 1.2fr;gap:0}
+  .dash-grid > div{padding:22px 24px}
+  .dash-grid > div + div{border-left:.5px solid var(--line-soft)}
+  .dash-kpis{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .kpi-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase;margin-bottom:6px}
+  .kpi-num{font-family:'Lora',serif;font-size:32px;color:var(--ink);font-weight:400;letter-spacing:-.8px;line-height:1}
+  .kpi-delta{font-size:11px;color:var(--forest);margin-top:4px;font-family:'JetBrains Mono',monospace}
+  .kpi-delta.down{color:var(--clay)}
+  .dash-panel-title{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.7px;text-transform:uppercase;margin-bottom:14px}
+  .theme-row{display:flex;align-items:center;gap:10px;margin-bottom:11px;font-size:12.5px}
+  .theme-row:last-child{margin-bottom:0}
+  .theme-row .lbl{color:var(--ink);min-width:120px;font-weight:400}
+  .theme-row .bar{flex:1;height:6px;background:var(--paper);border-radius:3px;overflow:hidden;position:relative}
+  .theme-row .bar .fill{position:absolute;left:0;top:0;bottom:0;background:var(--forest);border-radius:3px}
+  .theme-row .bar .fill.c2{background:var(--clay);opacity:.85}
+  .theme-row .bar .fill.c3{background:var(--sage)}
+  .theme-row .bar .fill.c4{background:var(--amber)}
+  .theme-row .bar .fill.c5{background:var(--muted-2)}
+  .theme-row .pct{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);min-width:32px;text-align:right}
+
+  .dropoff-mini{margin-top:22px}
+  .dropoff-mini .row{display:flex;align-items:center;gap:8px;font-size:11.5px;margin-bottom:6px;color:var(--ink-2)}
+  .dropoff-mini .row .dot-s{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .dropoff-mini .row .dot-s.a{background:var(--forest)}
+  .dropoff-mini .row .dot-s.b{background:var(--clay)}
+  .dropoff-mini .row .num{margin-left:auto;font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:11px}
+
+  /* ─── QUOTE ───────────────────────────────────────────────────── */
+  .quote-section{padding:5rem 2rem;max-width:820px;margin:0 auto;text-align:center}
+  .quote-mark{font-family:'Lora',serif;font-size:80px;color:var(--forest);line-height:.4;font-style:italic;display:block;margin-bottom:.5rem}
+  .quote{font-family:'Lora',serif;font-size:26px;line-height:1.35;font-weight:400;color:var(--ink);letter-spacing:-.3px;font-style:italic;text-wrap:balance;margin-bottom:1.75rem}
+  .quote-attr{font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:.4px}
+  .quote-attr strong{color:var(--ink);font-weight:500;font-family:'DM Sans',sans-serif;font-style:normal}
+
+  /* ─── CTA ─────────────────────────────────────────────────────── */
+  .cta-section{background:var(--ink);padding:5.5rem 2rem;text-align:center;position:relative;overflow:hidden}
+  .cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(15,110,86,.18),transparent 60%);pointer-events:none}
+  .cta-title{font-family:'Lora',serif;font-size:clamp(32px,4.5vw,44px);font-weight:400;color:var(--paper);margin-bottom:1.1rem;letter-spacing:-.5px;line-height:1.1;position:relative;text-wrap:balance}
+  .cta-title em{font-style:italic;color:var(--sage)}
+  .cta-sub{font-size:16px;color:var(--muted-2);margin-bottom:2rem;font-weight:300;position:relative;max-width:440px;margin-left:auto;margin-right:auto}
+  .btn-light{background:var(--paper);color:var(--ink);border:none;padding:13px 28px;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500;position:relative;transition:background .2s}
+  .btn-light:hover{background:#FFF}
+  .cta-foot{margin-top:1.25rem;font-size:12px;color:var(--muted);position:relative;font-family:'JetBrains Mono',monospace;letter-spacing:.3px}
+
+  footer{padding:2.25rem 3rem;border-top:.5px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);background:var(--ivory);flex-wrap:wrap;gap:1rem}
+  footer .left-f{display:flex;align-items:center;gap:20px}
+  footer .right-f{display:flex;align-items:center;gap:20px}
+  footer a{color:var(--muted);text-decoration:none;transition:color .2s}
+  footer a:hover{color:var(--ink)}
+
+  /* ─── SCROLL REVEALS ──────────────────────────────────────────── */
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+  .reveal.d1{transition-delay:.06s}
+  .reveal.d2{transition-delay:.12s}
+  .reveal.d3{transition-delay:.18s}
+  .reveal.d4{transition-delay:.24s}
+
+  /* ─── TWEAKS PANEL ────────────────────────────────────────────── */
+  .tweaks-panel{position:fixed;right:22px;bottom:22px;width:280px;background:#FFF;border:.5px solid var(--line);border-radius:14px;box-shadow:0 20px 50px -14px rgba(44,44,42,.22),0 4px 14px -4px rgba(44,44,42,.08);padding:16px 18px;z-index:100;display:none;font-size:13px}
+  .tweaks-panel.open{display:block}
+  .tweaks-title{font-family:'Lora',serif;font-size:15px;color:var(--ink);margin-bottom:2px;display:flex;justify-content:space-between;align-items:center}
+  .tweaks-title .close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;line-height:1}
+  .tweaks-sub{font-size:11px;color:var(--muted);margin-bottom:14px;font-family:'JetBrains Mono',monospace;letter-spacing:.3px}
+  .tw-group{margin-bottom:14px}
+  .tw-group:last-child{margin-bottom:0}
+  .tw-label{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:8px;font-weight:500}
+  .tw-opts{display:flex;gap:6px;flex-wrap:wrap}
+  .tw-opt{flex:1;min-width:0;padding:8px 10px;background:var(--ivory);border:.5px solid var(--line);border-radius:7px;cursor:pointer;font-size:12px;color:var(--ink-2);text-align:center;transition:all .15s;font-family:'DM Sans',sans-serif}
+  .tw-opt:hover{border-color:var(--muted-2)}
+  .tw-opt.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .tw-toggle{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--ivory);border:.5px solid var(--line);border-radius:7px;cursor:pointer;font-size:12px;color:var(--ink-2)}
+  .tw-toggle .sw{width:28px;height:16px;background:var(--line);border-radius:8px;position:relative;transition:background .2s}
+  .tw-toggle .sw::after{content:'';position:absolute;top:2px;left:2px;width:12px;height:12px;background:#FFF;border-radius:50%;transition:transform .2s}
+  .tw-toggle.on .sw{background:var(--forest)}
+  .tw-toggle.on .sw::after{transform:translateX(12px)}
+
+  /* ─── RESPONSIVE ──────────────────────────────────────────────── */
+  @media (max-width: 900px){
+    .demo-body{grid-template-columns:1fr}
+    .demo-left{border-right:none;border-bottom:.5px solid var(--line);min-height:280px}
+    .demo-right{min-height:360px}
+    .problem-grid{grid-template-columns:1fr}
+    .how-grid{grid-template-columns:1fr 1fr;gap:2rem}
+    .how-grid::before{display:none}
+    .benefits-head{grid-template-columns:1fr;gap:1.5rem}
+    .benefit-row,.benefit-row.flip{grid-template-columns:1fr;gap:1.75rem}
+    .benefit-row.flip .b-text{order:1}
+    .benefit-row.flip .b-visual{order:2}
+    .dash-grid{grid-template-columns:1fr}
+    .dash-grid > div + div{border-left:none;border-top:.5px solid var(--line-soft)}
+    .tweaks-panel{right:12px;bottom:12px;width:calc(100vw - 24px);max-width:280px}
+  }
+  @media (max-width: 680px){
+    nav{padding:1rem 1.25rem}
+    .nav-links{gap:1rem}
+    .nav-links .nav-link:not(.nav-cta){display:none}
+    .hero{padding:3.5rem 1.5rem 2.5rem}
+    .outreach{flex-direction:column}
+    footer{flex-direction:column;text-align:center;padding:1.75rem 1.5rem}
+  }
+</style>
+</head>
+<body>
+
+<!-- Tweakable defaults -->
+<script>
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "headlineVariant": "signal",
+  "ctaVariant": "quiet",
+  "showQuote": false
+}/*EDITMODE-END*/;
+window.__tweaks = {...TWEAK_DEFAULTS};
+</script>
+
+<nav>
+  <a class="logo" href="#">low<span>down</span></a>
+  <div class="nav-links">
+    <a class="nav-link" href="#how">How it works</a>
+    <a class="nav-link" href="#benefits">For hirers</a>
+    <a class="nav-link" href="#pricing">Pricing</a>
+    <button class="nav-cta">Book a demo</button>
+  </div>
+</nav>
+
+<!-- ─── HERO ────────────────────────────────────────────────────── -->
+<div class="hero">
+  <div class="hero-tag reveal"><span class="pulse"></span>Now in private beta</div>
+  <h1 class="reveal d1" id="hero-headline">
+    <!-- injected by script based on tweak -->
+  </h1>
+  <p class="hero-sub reveal d2" id="hero-sub">
+    A configurable AI chatbot for every job posting. Share the link and candidates get honest, role-specific answers — before anyone picks up the phone.
+  </p>
+  <div class="hero-cta-group reveal d3">
+    <button class="btn-primary">Book a demo</button>
+    <button class="btn-secondary">See a sample role →</button>
+  </div>
+  <p class="hero-note reveal d4">Configurable per role<span class="dot-sep">·</span>Share as a link<span class="dot-sep">·</span>Links to your ATS</p>
+</div>
+
+<!-- ─── DEMO WINDOW ─────────────────────────────────────────────── -->
+<div class="demo-wrap reveal">
+  <div class="demo-window">
+    <div class="demo-topbar">
+      <span class="dot dot-r"></span>
+      <span class="dot dot-y"></span>
+      <span class="dot dot-g"></span>
+      <div class="demo-url">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 0a15 15 0 010 20m0-20a15 15 0 000 20M2 12h20"/></svg>
+        lowdown.ai/r/fintra-head-of-growth
+      </div>
+    </div>
+    <div class="demo-body">
+      <div class="demo-left">
+        <div class="jd-eyebrow">FINTRA · SERIES B · LONDON</div>
+        <div class="jd-title">Head of Growth</div>
+        <div class="jd-meta">£90,000 – £120,000 + equity · Hybrid</div>
+        <div class="jd-pills">
+          <span class="jd-pill">Full-time</span>
+          <span class="jd-pill">5+ years exp.</span>
+          <span class="jd-pill">People management</span>
+        </div>
+        <hr class="jd-divider">
+        <div class="jd-section-label">The role</div>
+        <p class="jd-body" style="margin-bottom:.75rem">We're looking for a growth leader to own acquisition and retention as we scale toward Series C. You'll work closely with the CEO and product team across paid, organic, and partnership channels.</p>
+        <div class="jd-section-label">Responsibilities</div>
+        <ul class="jd-list">
+          <li>Own the full growth model — acquisition, activation, retention</li>
+          <li>Scale paid acquisition across Google and Meta</li>
+          <li>Build and lead a team of 3 growth specialists</li>
+          <li>Partner with product on onboarding and lifecycle flows</li>
+        </ul>
+        <div class="jd-fade"></div>
+      </div>
+      <div class="demo-right">
+        <div class="chat-header">
+          <div class="chat-avatar">L</div>
+          <div>
+            <div class="chat-header-title">Ask about this role</div>
+            <div class="chat-header-sub">Powered by Lowdown · Answers configured by Fintra</div>
+          </div>
+        </div>
+        <div class="chat-messages">
+          <div class="chat-bubble chat-them">Who would I actually be working with day to day?</div>
+          <div class="chat-bubble chat-us">You'd pair closely with the CEO and a PM. Your direct team is three: a paid specialist (2 yrs in), a content lead, and a data analyst. Collaborative group, used to moving fast.</div>
+          <div class="chat-bubble chat-them">What's the biggest fire to put out in year one?</div>
+          <div class="chat-bubble chat-us">CAC has crept up two quarters running and 90-day retention needs attention. The priority is diagnosing the funnel and owning the plan — the team has the capability, it's been waiting for senior direction.</div>
+        </div>
+        <div class="chat-input-area">
+          <input class="chat-input" placeholder="Ask anything about this role…" />
+          <button class="chat-send-btn" aria-label="Send"><div class="send-arrow"></div></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="demo-caption">
+    <div class="left"><span class="live"></span> Sample role · answers written by the hiring team</div>
+    <div>147 questions asked this week</div>
+  </div>
+</div>
+
+<!-- ─── PROBLEMS ────────────────────────────────────────────────── -->
+<section class="problems" id="problem">
+  <div class="problems-inner">
+    <div class="section-label reveal">The problem</div>
+    <h2 class="section-title reveal d1">Hiring is louder than ever.<br><em>And it's telling you less.</em></h2>
+    <div class="problem-grid">
+      <div class="problem-card reveal d1">
+        <div class="problem-num">01</div>
+        <div class="problem-title">Applications without signal</div>
+        <div class="problem-text">Inboxes are buried under AI-tailored CVs. There's no way to tell who's genuinely interested from who spray-applied to 50 jobs this morning.</div>
+      </div>
+      <div class="problem-card reveal d2">
+        <div class="problem-num">02</div>
+        <div class="problem-title">Cold outreach falls flat</div>
+        <div class="problem-text">Roughly 10% of cold outreach gets a reply. A JD doesn't give top candidates nearly enough to decide whether it's worth their time.</div>
+      </div>
+      <div class="problem-card reveal d3">
+        <div class="problem-num">03</div>
+        <div class="problem-title">The real questions surface too late</div>
+        <div class="problem-text">Team dynamics, real challenges, culture, equity — candidates only find out three interviews in. By then everyone's wasted time.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── BENEFITS ────────────────────────────────────────────────── -->
+<section class="benefits" id="benefits">
+  <div class="benefits-head">
+    <div>
+      <div class="section-label reveal">For hiring teams</div>
+      <h2 class="section-title reveal d1">Less answering the same thing.<br><em>More hiring the right people.</em></h2>
+    </div>
+    <div class="right reveal d2">
+      Lowdown sits between your JD and your ATS. Candidates get real answers. You get signal, faster — without adding a single interview slot to your calendar.
+    </div>
+  </div>
+
+  <!-- 01 Answer at scale -->
+  <div class="benefit-row">
+    <div class="b-text reveal">
+      <div class="b-idx">01 / ANSWER AT SCALE</div>
+      <div class="b-title">Answer the same five questions <em>once.</em></div>
+      <div class="b-desc">Equity, remote policy, team structure, manager style, interview loop. Configure it once, Lowdown handles it round-the-clock — so your recruiters can do the work only they can do.</div>
+    </div>
+    <div class="b-visual reveal d1">
+      <div class="q-stack">
+        <div class="q vis-card q-1">"What does the equity package actually look like?"
+          <div class="tag"><span class="count">×41</span> ASKED THIS WEEK</div>
+        </div>
+        <div class="q vis-card q-2">"Is this role remote-friendly or hybrid?"
+          <div class="tag"><span class="count">×28</span> ASKED THIS WEEK</div>
+        </div>
+        <div class="q vis-card q-3">"How big is the engineering team right now?"
+          <div class="tag"><span class="count">×19</span> ASKED THIS WEEK</div>
+        </div>
+        <div class="auto-answer">→ AUTO-ANSWERED</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 Sieve by engagement -->
+  <div class="benefit-row flip">
+    <div class="b-text reveal">
+      <div class="b-idx">02 / SIEVE BY ENGAGEMENT</div>
+      <div class="b-title">Sort candidates by <em>what they ask</em> — not just their CV.</div>
+      <div class="b-desc">Lowdown scores engagement: how deep they went, what they cared about, how considered their questions were. The candidates asking the most insightful questions surface at the top.</div>
+    </div>
+    <div class="b-visual reveal d1">
+      <div class="cand-list">
+        <div class="cand-row head"><div></div><div>CANDIDATE</div><div>QS</div><div>SIGNAL</div></div>
+        <div class="cand-row">
+          <div class="cand-av">MR</div>
+          <div class="cand-name">Maya R. <span class="sub">applied 2d ago</span></div>
+          <div class="cand-qs">14 qs</div>
+          <div class="score"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+        </div>
+        <div class="cand-row">
+          <div class="cand-av c2">JT</div>
+          <div class="cand-name">James T. <span class="sub">applied 4d ago</span></div>
+          <div class="cand-qs">9 qs</div>
+          <div class="score"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+        </div>
+        <div class="cand-row">
+          <div class="cand-av c4">PD</div>
+          <div class="cand-name">Priya D. <span class="sub">applied 1d ago</span></div>
+          <div class="cand-qs">6 qs</div>
+          <div class="score"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+        </div>
+        <div class="cand-row">
+          <div class="cand-av c3">SL</div>
+          <div class="cand-name">Sam L. <span class="sub">applied 3d ago</span></div>
+          <div class="cand-qs">1 q</div>
+          <div class="score"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 See dealbreakers -->
+  <div class="benefit-row">
+    <div class="b-text reveal">
+      <div class="b-idx">03 / SEE WHAT LOSES THEM</div>
+      <div class="b-title">See exactly where top candidates <em>drop off.</em></div>
+      <div class="b-desc">When strong candidates vanish after a specific answer, Lowdown flags the pattern. Fix the comp band, clarify the ownership, adjust the policy — before it quietly costs you the hire.</div>
+    </div>
+    <div class="b-visual reveal d1">
+      <div class="funnel">
+        <div class="funnel-title">ANSWERS CAUSING SENIOR CANDIDATES TO DROP</div>
+        <div class="dropoff">
+          <div class="do-card bad">
+            <div>
+              <div class="do-q">“What's the equity package?”</div>
+              <div class="do-a">0.15–0.35%, 4yr vest</div>
+            </div>
+            <div class="do-badge">
+              <div class="do-big">−62%</div>
+              <div class="do-lbl">left after</div>
+            </div>
+          </div>
+          <div class="do-card bad">
+            <div>
+              <div class="do-q">“How often in the office?”</div>
+              <div class="do-a">4 days/week, Shoreditch</div>
+            </div>
+            <div class="do-badge">
+              <div class="do-big">−31%</div>
+              <div class="do-lbl">left after</div>
+            </div>
+          </div>
+          <div class="do-card">
+            <div>
+              <div class="do-q">“Who would I report to?”</div>
+              <div class="do-a">Directly to the CEO</div>
+            </div>
+            <div class="do-badge">
+              <div class="do-big ok">−4%</div>
+              <div class="do-lbl">lands well</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 Highlight insightful -->
+  <div class="benefit-row flip">
+    <div class="b-text reveal">
+      <div class="b-idx">04 / SURFACE THE SHARPEST</div>
+      <div class="b-title">Find the candidate <em>asking the best questions.</em></div>
+      <div class="b-desc">Lowdown flags the people asking things that show real understanding — the ones you'd want to interview first. Walk in already knowing what matters to them.</div>
+    </div>
+    <div class="b-visual reveal d1">
+      <div class="insight">
+        <div class="insight-head">
+          <div class="cand-av">MR</div>
+          <div class="name">Maya R.</div>
+          <div class="tag">★ INSIGHTFUL</div>
+          <div class="meta">14 QS · 22 MIN</div>
+        </div>
+        <div class="insight-q">"How do you measure growth quality vs. volume? And how much does the CEO push for top-of-funnel at the expense of retention?"</div>
+        <div class="insight-q">"What does a successful first 90 days look like — and what would make you worried by month six?"</div>
+        <div class="insight-meta-row">
+          <span><strong>Topics:</strong> strategy, culture, expectations</span>
+          <span><strong>Match:</strong> senior</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 Outreach uplift -->
+  <div class="benefit-row">
+    <div class="b-text reveal">
+      <div class="b-idx">05 / MAKE OUTREACH LAND</div>
+      <div class="b-title">Cold messages that actually <em>get replies.</em></div>
+      <div class="b-desc">A Lowdown link in your outreach gives candidates a real reason to look. They can interrogate the role on their own time — and you get the response rate every in-house recruiter wishes they had.</div>
+    </div>
+    <div class="b-visual reveal d1">
+      <div class="outreach">
+        <div class="or-col">
+          <div class="label">JD-only outreach</div>
+          <div class="big">11%</div>
+          <div class="unit">reply rate</div>
+          <div class="or-arrow">→</div>
+        </div>
+        <div class="or-col active">
+          <div class="label">With a Lowdown link</div>
+          <div class="big">34%</div>
+          <div class="unit">reply rate</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:10px;letter-spacing:.3px;text-align:right">AVG. ACROSS 12 BETA TEAMS · Q1 2026</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── HOW IT WORKS ────────────────────────────────────────────── -->
+<section class="how-section" id="how">
+  <div class="section-label reveal">How it works</div>
+  <h2 class="section-title reveal d1">Configure once.<br><em>Share the link.</em> Done.</h2>
+  <div class="how-grid">
+    <div class="how-step reveal d1">
+      <div class="how-step-num">1</div>
+      <div class="how-step-title">Configure the role</div>
+      <div class="how-step-text">Paste the JD and add what it can't cover — team, real expectations, equity, culture, gotchas.</div>
+    </div>
+    <div class="how-step reveal d2">
+      <div class="how-step-num">2</div>
+      <div class="how-step-title">Share the link</div>
+      <div class="how-step-text">Every role gets its own Lowdown link. Drop it in outreach, a job board, or your careers page.</div>
+    </div>
+    <div class="how-step reveal d3">
+      <div class="how-step-num">3</div>
+      <div class="how-step-title">Candidates ask freely</div>
+      <div class="how-step-text">They get honest answers while they decide — or while they prep for an interview — on their time, not yours.</div>
+    </div>
+    <div class="how-step reveal d4">
+      <div class="how-step-num">4</div>
+      <div class="how-step-title">You see the signal</div>
+      <div class="how-step-text">Engagement, drop-off points, the sharpest questions. Walk into every interview already oriented.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── DASHBOARD PEEK ──────────────────────────────────────────── -->
+<section class="dash-section">
+  <div class="dash-inner">
+    <div class="dash-head">
+      <div class="section-label reveal">What you see</div>
+      <h2 class="section-title reveal d1">A dashboard that tells you <em>what your candidates actually care about.</em></h2>
+      <p class="section-sub reveal d2">Not vanity metrics. The things that make you a better hiring manager the next time you open a role.</p>
+    </div>
+
+    <div class="dash reveal d1">
+      <div class="dash-top">
+        <div class="title">Fintra — <span class="role">Head of Growth</span></div>
+        <div class="dash-tabs">
+          <span class="active">Overview</span>
+          <span>Candidates</span>
+          <span>Questions</span>
+          <span>Settings</span>
+        </div>
+      </div>
+      <div class="dash-grid">
+        <!-- KPIs -->
+        <div>
+          <div class="dash-panel-title">Last 14 days</div>
+          <div class="dash-kpis">
+            <div>
+              <div class="kpi-label">Conversations</div>
+              <div class="kpi-num">312</div>
+              <div class="kpi-delta">↑ 48% vs last role</div>
+            </div>
+            <div>
+              <div class="kpi-label">Questions asked</div>
+              <div class="kpi-num">1,847</div>
+              <div class="kpi-delta">avg 5.9 / candidate</div>
+            </div>
+            <div>
+              <div class="kpi-label">Applied after chat</div>
+              <div class="kpi-num">74</div>
+              <div class="kpi-delta">24% conversion</div>
+            </div>
+            <div>
+              <div class="kpi-label">Flagged for outreach</div>
+              <div class="kpi-num">11</div>
+              <div class="kpi-delta">high-signal asks</div>
+            </div>
+          </div>
+        </div>
+        <!-- Question themes -->
+        <div>
+          <div class="dash-panel-title">What they ask about most</div>
+          <div class="theme-row"><div class="lbl">Equity & comp</div><div class="bar"><div class="fill" style="width:78%"></div></div><div class="pct">31%</div></div>
+          <div class="theme-row"><div class="lbl">Team & manager</div><div class="bar"><div class="fill c3" style="width:62%"></div></div><div class="pct">22%</div></div>
+          <div class="theme-row"><div class="lbl">Expectations</div><div class="bar"><div class="fill c4" style="width:48%"></div></div><div class="pct">18%</div></div>
+          <div class="theme-row"><div class="lbl">Remote / hybrid</div><div class="bar"><div class="fill c2" style="width:38%"></div></div><div class="pct">14%</div></div>
+          <div class="theme-row"><div class="lbl">Interview loop</div><div class="bar"><div class="fill c5" style="width:22%"></div></div><div class="pct">9%</div></div>
+          <div class="theme-row"><div class="lbl">Other</div><div class="bar"><div class="fill c5" style="width:12%;opacity:.6"></div></div><div class="pct">6%</div></div>
+        </div>
+        <!-- Drop-off -->
+        <div>
+          <div class="dash-panel-title">Biggest drop-off moments</div>
+          <div class="dropoff-mini">
+            <div class="row"><span class="dot-s b"></span>After equity answer <span class="num">−59%</span></div>
+            <div class="row"><span class="dot-s b"></span>After "return to office" <span class="num">−31%</span></div>
+            <div class="row"><span class="dot-s a"></span>After comp answer <span class="num">−8%</span></div>
+            <div class="row"><span class="dot-s a"></span>After team size answer <span class="num">−4%</span></div>
+          </div>
+          <div style="margin-top:20px;padding:12px 14px;background:var(--paper);border-radius:8px;font-size:12px;color:var(--ink-2);line-height:1.55;font-weight:300">
+            <strong style="font-weight:500;color:var(--ink)">Suggestion:</strong> Your equity answer is costing you senior candidates. Review the range or clarify vesting.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── QUOTE ───────────────────────────────────────────────────── -->
+<section class="quote-section" id="quote">
+  <span class="quote-mark">"</span>
+  <div class="quote reveal">We used to spend the first 15 minutes of every phone screen re-explaining the role. That whole part of the process is just… gone now.</div>
+  <div class="quote-attr reveal d1"><strong>Anna Keeler</strong> &nbsp;·&nbsp; Head of Talent, Fintra</div>
+</section>
+
+<!-- ─── CTA ─────────────────────────────────────────────────────── -->
+<section class="cta-section">
+  <h2 class="cta-title" id="cta-title">
+    Only have<br><em>productive interviews.</em>
+  </h2>
+  <p class="cta-sub" id="cta-sub">Book a 20-minute call. We'll configure your first role with you, live.</p>
+  <button class="btn-light">Book a demo</button>
+  <div class="cta-foot">Free during private beta · No ATS change required</div>
+</section>
+
+<footer>
+  <div class="left-f">
+    <a class="logo" href="#" style="font-size:16px">low<span>down</span></a>
+    <span>© 2026 Lowdown</span>
+  </div>
+  <div class="right-f">
+    <a href="/cdn-cgi/l/email-protection#6008050c0c0f200c0f17040f170e4e0109"><span class="__cf_email__" data-cfemail="b5ddd0d9d9daf5d9dac2d1dac2db9bd4dc">[email&#160;protected]</span></a>
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+  </div>
+</footer>
+
+<!-- ─── TWEAKS PANEL ────────────────────────────────────────────── -->
+<div class="tweaks-panel" id="tweaks-panel">
+  <div class="tweaks-title">Tweaks <button class="close" id="tweaks-close" aria-label="Close">×</button></div>
+  <div class="tweaks-sub">PROTOTYPE CONTROLS</div>
+
+  <div class="tw-group">
+    <div class="tw-label">Hero headline</div>
+    <div class="tw-opts" data-tw="headlineVariant">
+      <button class="tw-opt" data-val="ask">Ask first</button>
+      <button class="tw-opt" data-val="signal">Signal</button>
+      <button class="tw-opt" data-val="honest">Honest</button>
+    </div>
+  </div>
+
+  <div class="tw-group">
+    <div class="tw-label">Closing CTA</div>
+    <div class="tw-opts" data-tw="ctaVariant">
+      <button class="tw-opt" data-val="productive">Productive</button>
+      <button class="tw-opt" data-val="quiet">Quiet</button>
+      <button class="tw-opt" data-val="signal">Signal</button>
+    </div>
+  </div>
+
+  <div class="tw-group">
+    <div class="tw-label">Customer quote</div>
+    <div class="tw-toggle" data-tw-toggle="showQuote">
+      <span>Show quote section</span>
+      <span class="sw"></span>
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* ─── Hero + CTA copy variants ─── */
+const HEADLINES = {
+  ask:     'Let candidates ask<br><em>before they apply.</em>',
+  signal:  'The honest conversation<br><em>before the first interview.</em>',
+  honest:  'The honest conversation<br><em>before the first interview.</em>'
+};
+const SUBS = {
+  ask:    "A configurable AI chatbot for every job posting. Share the link and candidates get honest, role-specific answers — before anyone picks up the phone.",
+  signal: "A configurable AI chatbot for every role. Candidates interrogate the job on their own time. You see who's serious, what they care about, and where you're losing them.",
+  honest: "A configurable AI chatbot for every role. Candidates interrogate the job on their own time. You see who's serious, what they care about, and where you're losing them."
+};
+const CTA_TITLES = {
+  productive: 'Only have<br><em>productive interviews.</em>',
+  quiet:      'Less re-explaining.<br><em>More hiring.</em>',
+  signal:     'Stop guessing<br><em>who really wants it.</em>'
+};
+const CTA_SUBS = {
+  productive: "Book a 20-minute call. We'll configure your first role with you, live.",
+  quiet:      "20 minutes to set up your first role. Send the link the same afternoon.",
+  signal:     "See the signal hiding in your pipeline. Live demo, 20 minutes, we set it up with you."
+};
+
+function applyTweaks(){
+  const t = window.__tweaks;
+  document.getElementById('hero-headline').innerHTML = HEADLINES[t.headlineVariant] || HEADLINES.ask;
+  document.getElementById('hero-sub').textContent = SUBS[t.headlineVariant] || SUBS.ask;
+  document.getElementById('cta-title').innerHTML = CTA_TITLES[t.ctaVariant] || CTA_TITLES.productive;
+  document.getElementById('cta-sub').textContent = CTA_SUBS[t.ctaVariant] || CTA_SUBS.productive;
+  document.getElementById('quote').style.display = t.showQuote ? '' : 'none';
+
+  // sync panel state
+  document.querySelectorAll('[data-tw]').forEach(group=>{
+    const key = group.dataset.tw;
+    group.querySelectorAll('.tw-opt').forEach(btn=>{
+      btn.classList.toggle('active', btn.dataset.val === t[key]);
+    });
+  });
+  document.querySelectorAll('[data-tw-toggle]').forEach(tog=>{
+    const key = tog.dataset.twToggle;
+    tog.classList.toggle('on', !!t[key]);
+  });
+}
+applyTweaks();
+
+/* ─── Tweaks wiring ─── */
+document.querySelectorAll('[data-tw]').forEach(group=>{
+  const key = group.dataset.tw;
+  group.querySelectorAll('.tw-opt').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      window.__tweaks[key] = btn.dataset.val;
+      applyTweaks();
+      window.parent.postMessage({type:'__edit_mode_set_keys', edits:{[key]: btn.dataset.val}}, '*');
+    });
+  });
+});
+document.querySelectorAll('[data-tw-toggle]').forEach(tog=>{
+  const key = tog.dataset.twToggle;
+  tog.addEventListener('click', ()=>{
+    window.__tweaks[key] = !window.__tweaks[key];
+    applyTweaks();
+    window.parent.postMessage({type:'__edit_mode_set_keys', edits:{[key]: window.__tweaks[key]}}, '*');
+  });
+});
+
+/* ─── Host tweak protocol ─── */
+window.addEventListener('message', (e)=>{
+  const d = e.data;
+  if(!d || typeof d !== 'object') return;
+  if(d.type === '__activate_edit_mode'){
+    document.getElementById('tweaks-panel').classList.add('open');
+  } else if(d.type === '__deactivate_edit_mode'){
+    document.getElementById('tweaks-panel').classList.remove('open');
+  }
+});
+document.getElementById('tweaks-close').addEventListener('click', ()=>{
+  document.getElementById('tweaks-panel').classList.remove('open');
+});
+window.parent.postMessage({type:'__edit_mode_available'}, '*');
+
+/* ─── Scroll reveals ─── */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(en=>{
+    if(en.isIntersecting){
+      en.target.classList.add('in');
+      io.unobserve(en.target);
+    }
+  });
+}, {threshold:.12, rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+
+</body>
+</html>
