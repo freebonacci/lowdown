@@ -79,6 +79,10 @@
 
   /* Benefits summary strip */
   .strip{max-width:1000px;margin:0 auto 5rem;padding:0 2rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+  .strip.strip-single{grid-template-columns:1fr;max-width:720px}
+  .strip.strip-single .strip-item{text-align:center}
+  .strip.strip-single .strip-mark{margin:0 auto .6rem}
+  .strip.strip-single .strip-item p{font-family:'Lora',serif;font-size:22px;font-weight:400;line-height:1.35;color:var(--ink);letter-spacing:-.2px}
   .strip-item{background:#FFF;border:.5px solid var(--line-soft);border-radius:12px;padding:1.5rem 1.6rem}
   .strip-mark{font-family:'Lora',serif;font-style:italic;font-size:22px;color:var(--forest);line-height:1;margin-bottom:.75rem;display:block}
   .strip-item p{font-size:15px;color:var(--ink);line-height:1.45;font-weight:400;text-wrap:pretty}
@@ -317,10 +321,8 @@
 </div>
 
 <!-- 3. BENEFITS STRIP -->
-<div class="strip">
-  <div class="strip-item reveal"><span class="strip-mark">—</span><p>Give passive candidates a reason to engage before committing to a call.</p></div>
-  <div class="strip-item reveal d1"><span class="strip-mark">—</span><p>Answer the questions that make great candidates say yes.</p></div>
-  <div class="strip-item reveal d2"><span class="strip-mark">—</span><p>Identify top candidates based on the quality of their questions.</p></div>
+<div class="strip strip-single">
+  <div class="strip-item reveal"><span class="strip-mark">—</span><p>The conversation that turns a passive candidate into an applicant.</p></div>
 </div>
 
 <!-- 4. PROBLEMS -->
@@ -336,8 +338,8 @@
       </div>
       <div class="problem-card reveal d2">
         <div class="problem-num">02</div>
-        <div class="problem-title">Too many applications</div>
-        <div class="problem-text">Hiring teams are buried. There's no way to tell who's serious and who spray-applied to 50 jobs this morning with an AI tool tailoring their CVs.</div>
+        <div class="problem-title">The best candidates aren't applying</div>
+        <div class="problem-text">They know their applications are getting buried beneath people mass-applying with CV-tailoring AI. They need to be convinced.</div>
       </div>
       <div class="problem-card reveal d3">
         <div class="problem-num">03</div>
@@ -532,7 +534,7 @@
 
 <footer>
   <div class="left-f"><a class="logo" href="#" style="font-size:16px">low<span>down</span></a><span>© 2026 Lowdown</span></div>
-  <div class="right-f"><a href="/cdn-cgi/l/email-protection#a7cfc2cbcbc8e7cbc8d0c3c8d0c989c6ce"><span class="__cf_email__" data-cfemail="68000d0404072804071f0c071f06460901">[email&#160;protected]</span></a><a href="#">Privacy</a><a href="#">Terms</a></div>
+  <div class="right-f"><a href="/cdn-cgi/l/email-protection#b0d8d5dcdcdff0dcdfc7d4dfc7de9ed1d9"><span class="__cf_email__" data-cfemail="c0a8a5acacaf80acafb7a4afb7aeeea1a9">[email&#160;protected]</span></a><a href="#">Privacy</a><a href="#">Terms</a></div>
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
