@@ -77,7 +77,6 @@
   .demo-caption{display:flex;justify-content:space-between;align-items:center;max-width:860px;margin:14px auto 0;padding:0 .5rem;font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace}
   .demo-caption .live{width:6px;height:6px;border-radius:50%;background:var(--sage);display:inline-block;margin-right:8px;vertical-align:middle}
 
-  /* Benefits summary strip */
   .strip{max-width:1000px;margin:0 auto 5rem;padding:0 2rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
   .strip.strip-single{grid-template-columns:1fr;max-width:720px}
   .strip.strip-single .strip-item{text-align:center}
@@ -122,7 +121,6 @@
   .q-stack .q-1{top:0;transform:rotate(-1.2deg);z-index:3}
   .q-stack .q-2{top:80px;left:30px;right:10px;transform:rotate(.8deg);z-index:2}
   .q-stack .q-3{top:160px;left:10px;right:30px;transform:rotate(-.5deg);z-index:1}
-  .q-stack .auto-answer{position:absolute;right:-8px;top:34px;background:var(--ink);color:var(--paper);font-size:10px;padding:4px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace;letter-spacing:.3px;z-index:4;box-shadow:0 4px 14px -4px rgba(44,44,42,.3)}
 
   .outreach{display:flex;gap:14px;align-items:stretch}
   .or-col{flex:1;background:#FFF;border:.5px solid var(--line);border-radius:12px;padding:16px 18px;position:relative}
@@ -145,7 +143,6 @@
   .insight-meta-row{display:flex;gap:16px;font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace}
   .insight-meta-row strong{color:var(--ink);font-weight:500}
 
-  /* Drop-off card: two questions, two outcomes */
   .do-card{background:#FFF;border:.5px solid var(--line);border-radius:12px;overflow:hidden}
   .do-title{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.7px;text-transform:uppercase;padding:14px 16px 10px;border-bottom:.5px solid var(--line-soft)}
   .do-row{padding:14px 16px;border-bottom:.5px solid var(--line-soft);display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
@@ -222,7 +219,7 @@
   .reveal.d1{transition-delay:.06s}.reveal.d2{transition-delay:.12s}
   .reveal.d3{transition-delay:.18s}.reveal.d4{transition-delay:.24s}
 
-  @media (max-width: 900px){
+  @media(max-width:900px){
     .demo-body{grid-template-columns:1fr}
     .demo-left{border-right:none;border-bottom:.5px solid var(--line)}
     .strip{grid-template-columns:1fr;gap:.75rem;margin-bottom:3rem}
@@ -236,41 +233,13 @@
     .dash-grid{grid-template-columns:1fr}
     .dash-grid > div + div{border-left:none;border-top:.5px solid var(--line-soft)}
   }
-  @media (max-width: 680px){
+  @media(max-width:680px){
     nav{padding:1rem 1.25rem}
     .nav-links .nav-link:not(.nav-cta){display:none}
     .hero{padding:3.5rem 1.5rem 2.5rem}
     .outreach{flex-direction:column}
     footer{flex-direction:column;text-align:center;padding:1.75rem 1.5rem}
   }
-
-  /* Waitlist modal */
-  .modal-backdrop{position:fixed;inset:0;background:rgba(20,20,18,.55);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:100;padding:1.5rem;opacity:0;transition:opacity .25s ease}
-  .modal-backdrop.open{display:flex;opacity:1}
-  .modal{background:var(--ivory);border:.5px solid var(--line);border-radius:14px;padding:2.25rem 2.25rem 1.75rem;width:100%;max-width:420px;box-shadow:0 30px 80px -20px rgba(20,20,18,.4);transform:translateY(8px);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
-  .modal-backdrop.open .modal{transform:none}
-  .modal-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--forest);letter-spacing:.8px;text-transform:uppercase;margin-bottom:.5rem}
-  .modal-title{font-family:'Lora',serif;font-size:26px;font-weight:400;line-height:1.15;letter-spacing:-.4px;color:var(--ink);margin-bottom:.5rem}
-  .modal-title em{font-style:italic;color:var(--forest)}
-  .modal-sub{font-size:14px;color:var(--ink-3);line-height:1.5;font-weight:300;margin-bottom:1.5rem}
-  .modal-field{margin-bottom:.85rem}
-  .modal-field label{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase;margin-bottom:6px}
-  .modal-field input{width:100%;background:#FFF;border:.5px solid var(--line);border-radius:8px;padding:11px 13px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--ink);outline:none;transition:border-color .2s}
-  .modal-field input:focus{border-color:var(--forest)}
-  .modal-field input::placeholder{color:var(--muted-2)}
-  .modal-submit{width:100%;background:var(--forest);color:var(--mint);border:none;padding:12px 20px;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500;margin-top:.5rem;transition:background .2s}
-  .modal-submit:hover:not(:disabled){background:var(--forest-deep)}
-  .modal-submit:disabled{opacity:.6;cursor:wait}
-  .modal-close{position:absolute;top:14px;right:16px;background:transparent;border:none;cursor:pointer;font-size:20px;color:var(--muted);line-height:1;padding:4px 8px;border-radius:4px;font-family:'DM Sans',sans-serif}
-  .modal-close:hover{color:var(--ink)}
-  .modal-wrap{position:relative}
-  .modal-foot{font-size:11px;color:var(--muted);margin-top:.85rem;text-align:center;font-family:'JetBrains Mono',monospace;letter-spacing:.3px}
-  .modal-err{font-size:12px;color:var(--clay);margin-top:.65rem;min-height:16px}
-  .modal-success{text-align:center;padding:1rem 0 .5rem}
-  .modal-success .check{width:42px;height:42px;border-radius:50%;background:var(--mint);color:var(--forest);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:22px}
-  .modal-success .t{font-family:'Lora',serif;font-size:22px;color:var(--ink);margin-bottom:.4rem}
-  .modal-success .t em{font-style:italic;color:var(--forest)}
-  .modal-success .s{font-size:14px;color:var(--ink-3);font-weight:300;line-height:1.5}
 </style>
 </head>
 <body>
@@ -280,7 +249,7 @@
   <div class="nav-links">
     <a class="nav-link" href="#benefits">Impact</a>
     <a class="nav-link" href="#how">How it works</a>
-    <button class="nav-cta" data-open-demo>Book a demo</button>
+    <button class="nav-cta" onclick="bookDemo()">Book a demo</button>
   </div>
 </nav>
 
@@ -289,7 +258,7 @@
   <h1 class="reveal d1">The best candidates need more than a JD.<br><em>Give them the lowdown.</em></h1>
   <p class="hero-sub reveal d2">A configurable AI chatbot for every role. Candidates get honest answers on their own time. You get the reply you've been waiting for.</p>
   <div class="hero-cta-group reveal d3">
-    <button class="btn-primary" data-open-demo>Book a demo</button>
+    <button class="btn-primary" onclick="bookDemo()">Book a demo</button>
     <button class="btn-secondary" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth',block:'start'})">How it works →</button>
   </div>
   <p class="hero-note reveal d4">Configurable per role<span class="dot-sep">·</span>Share as a link<span class="dot-sep">·</span>Links to your ATS</p>
@@ -377,7 +346,7 @@
   </div>
 </section>
 
-<!-- 5. BENEFITS (FOR HIRERS) -->
+<!-- 5. BENEFITS -->
 <section class="benefits" id="benefits">
   <div class="benefits-head">
     <div>
@@ -412,7 +381,7 @@
     </div>
   </div>
 
-  <!-- 02 Dealbreakers upfront -->
+  <!-- 02 Candidate experience -->
   <div class="benefit-row flip">
     <div class="b-text reveal">
       <div class="b-idx">02 / DEALBREAKERS, UPFRONT</div>
@@ -447,7 +416,7 @@
     </div>
   </div>
 
-  <!-- 03 Answer once / save time -->
+  <!-- 03 Save time -->
   <div class="benefit-row">
     <div class="b-text reveal">
       <div class="b-idx">03 / SAVE TIME</div>
@@ -463,26 +432,23 @@
     </div>
   </div>
 
-  <!-- 04 Questions tell you who they are -->
+  <!-- 04 Candidate experience -->
   <div class="benefit-row flip">
     <div class="b-text reveal">
-      <div class="b-idx">04 / READ THE QUESTIONS</div>
-      <div class="b-title">The CV tells you what they've done.<br><em>The questions tell you who they are.</em></div>
-      <div class="b-desc">Engagement depth, question quality, time spent — Lowdown surfaces the candidates worth calling first. Walk into every first call already knowing what matters to them.</div>
+      <div class="b-idx">04 / BETTER CANDIDATE EXPERIENCE</div>
+      <div class="b-title">Candidates deserve honest answers.<br><em>Not another JD to decode.</em></div>
+      <div class="b-desc">Lowdown gives candidates the context they actually need — the real challenges, what the team is like, what success looks like — before they invest time in a process. The candidates who apply have already decided they want in.</div>
     </div>
     <div class="b-visual reveal d1">
-      <div class="insight">
-        <div class="insight-head">
-          <div class="cand-av">MR</div>
-          <div class="name">Maya R.</div>
-          <div class="tag">★ INSIGHTFUL</div>
-          <div class="meta">14 QS · 22 MIN</div>
+      <div style="background:#FFF;border:.5px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 2px 10px -4px rgba(44,44,42,.08)">
+        <div style="padding:10px 14px;border-bottom:.5px solid var(--line-soft);display:flex;align-items:center;gap:8px;background:var(--paper)">
+          <div style="width:22px;height:22px;border-radius:50%;background:var(--mint);color:var(--forest);display:flex;align-items:center;justify-content:center;font-family:'Lora',serif;font-size:11px">L</div>
+          <div style="font-size:12px;font-weight:500;color:var(--ink)">Ask about this role</div>
+          <div style="font-size:11px;color:var(--muted);margin-left:auto;font-family:'JetBrains Mono',monospace">Lowdown · Fintra</div>
         </div>
-        <div class="insight-q">"How do you measure growth quality vs. volume? And how much does the CEO push for top-of-funnel at the expense of retention?"</div>
-        <div class="insight-q">"What does a successful first 90 days look like — and what would make you worried by month six?"</div>
-        <div class="insight-meta-row">
-          <span><strong>Topics:</strong> strategy, culture, expectations</span>
-          <span><strong>Match:</strong> senior</span>
+        <div style="padding:14px;display:flex;flex-direction:column;gap:10px">
+          <div style="background:var(--forest);color:var(--mint);padding:9px 12px;border-radius:12px;border-bottom-right-radius:3px;font-size:12.5px;line-height:1.55;align-self:flex-end;max-width:88%">Why might I not be a good fit for this role?</div>
+          <div style="background:var(--paper);color:var(--ink);padding:9px 12px;border-radius:12px;border-bottom-left-radius:3px;font-size:12.5px;line-height:1.6;align-self:flex-start;max-width:94%;font-weight:300">A few honest reasons. The office commitment is real — three to four days in Shoreditch, Monday fixed. The role requires building structure where little exists, which suits some people and frustrates others. And the salary ceiling is £120k — if you're above that and not motivated by the equity, the numbers may not work. None of these are reasons not to apply if they don't apply to you.</div>
         </div>
       </div>
     </div>
@@ -508,7 +474,6 @@
       <div class="section-label reveal">What you see</div>
       <h2 class="section-title reveal d1">A dashboard with <em>everything your pipeline is trying to tell you.</em></h2>
     </div>
-
     <div class="dash reveal d1">
       <div class="dash-top">
         <div class="title">Fintra — <span class="role">Head of Growth</span></div>
@@ -554,7 +519,7 @@
 <section class="cta-section">
   <h2 class="cta-title">20 minutes to set up<br><em>your first role.</em></h2>
   <p class="cta-sub">Bring a JD. We'll configure it with you, live, and you'll have a link the same afternoon.</p>
-  <button class="btn-light" data-open-demo>Book a demo</button>
+  <button class="btn-light" onclick="bookDemo()">Book a demo</button>
   <div class="cta-foot">Free during private beta · No ATS change required</div>
 </section>
 
@@ -562,100 +527,17 @@
   <div class="left-f"><a class="logo" href="#" style="font-size:16px">low<span>down</span></a><span>© 2026 Lowdown</span></div>
 </footer>
 
-<!-- Book-a-demo modal -->
-<div class="modal-backdrop" id="demo-modal" role="dialog" aria-modal="true" aria-labelledby="demo-modal-title">
-  <div class="modal">
-    <div class="modal-wrap">
-      <button class="modal-close" aria-label="Close" onclick="document.getElementById('demo-modal').classList.remove('open')">×</button>
-      <form id="demo-form" novalidate>
-        <div class="modal-eyebrow">Book a demo</div>
-        <div class="modal-title" id="demo-modal-title">Leave your details.<br><em>We'll be in touch.</em></div>
-        <div class="modal-sub">We'll reach out to set up a 20-minute call and configure your first role together.</div>
-        <div class="modal-field">
-          <label for="demo-email">Work email</label>
-          <input type="email" id="demo-email" placeholder="you@company.com" autocomplete="email" required>
-        </div>
-        <div class="modal-field">
-          <label for="demo-company">Company</label>
-          <input type="text" id="demo-company" placeholder="Company name" autocomplete="organization" required>
-        </div>
-        <button type="submit" class="modal-submit" id="demo-submit">Book a demo</button>
-        <div class="modal-err" id="demo-err"></div>
-        <div class="modal-foot">Private beta · No spam, ever</div>
-      </form>
-      <div class="modal-success" id="demo-success" style="display:none">
-        <div class="check">✓</div>
-        <div class="t">You're <em>on the list.</em></div>
-        <div class="s">We'll be in touch within a day or two to set up your demo.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
+const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdj13ri4MMgFdOVBJbkBDDTDU6K0QMOAjwkKnKoYG8owkc-tQ/viewform?usp=publish-editor';
+
+function bookDemo() {
+  window.open(FORM_URL, '_blank');
+}
+
 const io = new IntersectionObserver((entries)=>{
   entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
 },{threshold:.12, rootMargin:'0px 0px -40px 0px'});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-
-/* Book-a-demo modal + Supabase waitlist */
-const SUPABASE_URL = 'https://poqizrabfzgptratqjfq.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBvcWl6cmFiZnpncHRyYXRxamZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNDUxMzIsImV4cCI6MjA5MTkyMTEzMn0.2Ph0kNN-PA2b_kmW5YHgW-7wft4mB67RfgRWkb72nNs';
-
-const backdrop = document.getElementById('demo-modal');
-const modalForm = document.getElementById('demo-form');
-const modalSuccess = document.getElementById('demo-success');
-const modalErr = document.getElementById('demo-err');
-const modalSubmit = document.getElementById('demo-submit');
-
-function openModal(){
-  modalForm.style.display='';
-  modalSuccess.style.display='none';
-  modalErr.textContent='';
-  document.getElementById('demo-email').value='';
-  document.getElementById('demo-company').value='';
-  backdrop.classList.add('open');
-  setTimeout(()=>document.getElementById('demo-email').focus(), 120);
-}
-function closeModal(){ backdrop.classList.remove('open'); }
-
-document.querySelectorAll('[data-open-demo]').forEach(btn=>{
-  btn.addEventListener('click', openModal);
-});
-backdrop.addEventListener('click', (e)=>{ if(e.target===backdrop) closeModal(); });
-document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModal(); });
-
-document.getElementById('demo-form').addEventListener('submit', async (e)=>{
-  e.preventDefault();
-  modalErr.textContent='';
-  const email = document.getElementById('demo-email').value.trim().toLowerCase();
-  const company = document.getElementById('demo-company').value.trim();
-  if(!email || !company){ modalErr.textContent='Please add your email and company.'; return; }
-  modalSubmit.disabled = true; modalSubmit.textContent='Sending…';
-  try{
-    const res = await fetch(SUPABASE_URL+'/rest/v1/waitlist', {
-      method:'POST',
-      headers:{
-        'apikey': SUPABASE_KEY,
-        'Authorization': 'Bearer '+SUPABASE_KEY,
-        'Content-Type':'application/json',
-        'Prefer':'return=minimal'
-      },
-      body: JSON.stringify({ email, company })
-    });
-    if(!res.ok){
-      const txt = await res.text();
-      throw new Error(txt || ('Status '+res.status));
-    }
-    modalForm.style.display='none';
-    modalSuccess.style.display='block';
-  }catch(err){
-    modalErr.textContent = 'Something went wrong. Try again or email hello@lowdown.ai.';
-    console.error(err);
-  }finally{
-    modalSubmit.disabled=false; modalSubmit.textContent='Book a demo';
-  }
-});
 </script>
 </body>
 </html>
